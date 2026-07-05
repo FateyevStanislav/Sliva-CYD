@@ -32,6 +32,7 @@ namespace SlivaCYD1.Player.Stamina
         private void OnDisable()
         {
             playerStaminaController.Model.StaminaChanged -= OnStaminaChanged;
+            fadeCoroutine = null;
         }
 
         private void SyncImmediate()
