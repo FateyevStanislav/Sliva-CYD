@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace SlivaCYD1.Player.Stamina
 {
+    [DefaultExecutionOrder(-100)]
     public class PlayerStaminaController : MonoBehaviour
     {
         [Header("References")]
@@ -15,6 +16,7 @@ namespace SlivaCYD1.Player.Stamina
         public bool IsSprintActive { get; private set; }
 
         private PlayerStaminaModel playerStaminaModel;
+        public PlayerStaminaModel Model => playerStaminaModel;
 
         private void Awake()
         {
@@ -34,8 +36,6 @@ namespace SlivaCYD1.Player.Stamina
                 DrainStamina();
             else
                 RegenerateStamina();
-
-            ClampStamina();
         }
 
         private void UpdateSprintState()
@@ -48,8 +48,9 @@ namespace SlivaCYD1.Player.Stamina
 
         private void DrainStamina()
         {
-            playerStaminaModel.CurrentStamina -=
-                playerStaminaModel.SprintDrainPerSec * Time.deltaTime;
+            var newStamina = playerStaminaModel.CurrentStamina 
+                             - playerStaminaModel.SprintDrainPerSec * Time.deltaTime;
+            playerStaminaModel.SetStamina(newStamina);
         }
 
         private void RegenerateStamina()
@@ -57,16 +58,9 @@ namespace SlivaCYD1.Player.Stamina
             if (!playerStaminaModel.CanRegenerate)
                 return;
 
-            playerStaminaModel.CurrentStamina +=
-                playerStaminaModel.RegenerationPerSec * Time.deltaTime;
-        }
-
-        private void ClampStamina()
-        {
-            playerStaminaModel.CurrentStamina = Mathf.Clamp(
-                playerStaminaModel.CurrentStamina,
-                0f,
-                playerStaminaModel.MaxStamina);
+            var newStamina = playerStaminaModel.CurrentStamina 
+                             + playerStaminaModel.RegenerationPerSec * Time.deltaTime;
+            playerStaminaModel.SetStamina(newStamina);
         }
     }
 }
