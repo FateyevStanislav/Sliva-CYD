@@ -4,12 +4,13 @@ namespace SlivaCYD1.Player.Movement
     {
         public float WalkSpeed { get; }
         public float RunSpeed { get; }
+        public float CurrentSpeed { get; set; }
+        
         public float Acceleration { get; }
         public float Deceleration { get; }
+        
         public float RotationSmooth { get; }
-
-        public float CurrentSpeed { get; set; }
-
+        
         public PlayerMovementModel(
             float walkSpeed,
             float runSpeed,

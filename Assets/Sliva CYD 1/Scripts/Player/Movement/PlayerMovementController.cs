@@ -1,3 +1,4 @@
+using SlivaCYD1.Player.Stamina;
 using UnityEngine;
 
 namespace SlivaCYD1.Player.Movement
@@ -10,6 +11,7 @@ namespace SlivaCYD1.Player.Movement
         [SerializeField] private PlayerInputReader playerInputReader;
         [SerializeField] private PlayerMovementAnimatorView playerMovementAnimatorView;
         [SerializeField] private Transform cameraTransform;
+        [SerializeField] private PlayerStaminaController playerStaminaController;
 
         [Header("Settings")]
         [SerializeField] private float walkSpeed = 5f;
@@ -25,6 +27,7 @@ namespace SlivaCYD1.Player.Movement
             characterController ??= GetComponent<CharacterController>();
             playerInputReader ??= GetComponent<PlayerInputReader>();
             playerMovementAnimatorView ??= GetComponent<PlayerMovementAnimatorView>();
+            playerStaminaController ??= GetComponent<PlayerStaminaController>();
 
             playerMovementModel = new PlayerMovementModel(
                 walkSpeed,
@@ -64,7 +67,7 @@ namespace SlivaCYD1.Player.Movement
             if (playerInputReader.MoveInput == Vector2.zero)
                 return 0f;
 
-            return playerInputReader.IsSprintPressed
+            return playerStaminaController.IsSprintActive
                 ? playerMovementModel.RunSpeed
                 : playerMovementModel.WalkSpeed;
         }
