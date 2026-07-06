@@ -8,11 +8,24 @@ namespace SlivaCYD1.Player
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
         public bool IsSprintPressed { get; private set; }
+        
+        public bool AttackRequested { get; private set; }
 
         public void OnMove(InputValue value) => MoveInput = value.Get<Vector2>();
-
         public void OnLook(InputValue value) => LookInput = value.Get<Vector2>();
-        
         public void OnSprint(InputValue value) => IsSprintPressed = value.isPressed;
+        
+        public void OnAttack(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                AttackRequested = true;
+            }
+        }
+
+        public void ClearAttackRequest()
+        {
+            AttackRequested = false;
+        }
     }
 }

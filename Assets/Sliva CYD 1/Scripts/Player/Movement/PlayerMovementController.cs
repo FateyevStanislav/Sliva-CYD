@@ -1,3 +1,4 @@
+using SlivaCYD1.Player.Attack;
 using SlivaCYD1.Player.Stamina;
 using UnityEngine;
 
@@ -9,9 +10,10 @@ namespace SlivaCYD1.Player.Movement
         [Header("References")]
         [SerializeField] private CharacterController characterController;
         [SerializeField] private PlayerInputReader playerInputReader;
-        [SerializeField] private PlayerMovementAnimatorView playerMovementAnimatorView;
+        [SerializeField] private PlayerMovementAnimator playerMovementAnimator;
         [SerializeField] private Transform cameraTransform;
         [SerializeField] private PlayerStaminaController playerStaminaController;
+        [SerializeField] private PlayerAttackController playerAttackController;
 
         [Header("Settings")]
         [SerializeField] private float walkSpeed = 5f;
@@ -26,8 +28,9 @@ namespace SlivaCYD1.Player.Movement
         {
             characterController ??= GetComponent<CharacterController>();
             playerInputReader ??= GetComponent<PlayerInputReader>();
-            playerMovementAnimatorView ??= GetComponent<PlayerMovementAnimatorView>();
+            playerMovementAnimator ??= GetComponent<PlayerMovementAnimator>();
             playerStaminaController ??= GetComponent<PlayerStaminaController>();
+            playerAttackController ??= GetComponent<PlayerAttackController>();
 
             playerMovementModel = new PlayerMovementModel(
                 walkSpeed,
@@ -50,6 +53,12 @@ namespace SlivaCYD1.Player.Movement
         
         private void UpdateSpeed()
         {
+            if (playerAttackController != null && playerAttackController.IsAttacking)
+            {
+                playerMovementModel.CurrentSpeed = 0f;
+                return;
+            }
+
             var targetSpeed = GetTargetSpeed();
 
             var changeRate = targetSpeed > playerMovementModel.CurrentSpeed
@@ -63,7 +72,7 @@ namespace SlivaCYD1.Player.Movement
         }
         
         private float GetTargetSpeed()
-        {
+        { 
             if (playerInputReader.MoveInput == Vector2.zero)
                 return 0f;
 
@@ -117,7 +126,7 @@ namespace SlivaCYD1.Player.Movement
         private void UpdateAnimation()
         {
             var normalizedSpeed = playerMovementModel.CurrentSpeed / playerMovementModel.RunSpeed;
-            playerMovementAnimatorView.UpdateMovementSpeed(normalizedSpeed);
+            playerMovementAnimator.UpdateMovementSpeed(normalizedSpeed);
         }
     }
 }
