@@ -45,7 +45,10 @@ namespace SlivaCYD1.Player.Attack
         public void OnAttackHitFrame()
         {
             var candidates = Physics.OverlapSphere(attackPoint.position, attackRadius, targetLayer);
-            playerAttackModel.ResolveHit(candidates);
+    
+            var hitDirection = attackPoint.forward; 
+    
+            playerAttackModel.ResolveHit(candidates, hitDirection);
         }
 
         public void OnAttackFinished()
