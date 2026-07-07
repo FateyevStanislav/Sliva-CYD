@@ -11,7 +11,7 @@ namespace Sliva_CYD_2.Gameplay
         [SerializeField] private BoneController bonePrefab;
         [SerializeField] private Transform spawnPoint;
         
-        private List<BoneController> activeBones = new List<BoneController>();
+        private readonly List<BoneController> activeBones = new();
 
         private void Start()
         {
@@ -28,10 +28,8 @@ namespace Sliva_CYD_2.Gameplay
 
         public void ThrowBones()
         {
-            foreach (var bone in activeBones)
-            {
-                if (bone != null) Destroy(bone.gameObject);
-            }
+            foreach (var bone in activeBones.Where(bone => bone != null))
+                Destroy(bone.gameObject);
             activeBones.Clear();
 
             for (int i = 0; i < 2; i++)
@@ -50,7 +48,11 @@ namespace Sliva_CYD_2.Gameplay
 
         public void SaveCurrentState()
         {
-            var saveData = activeBones.Where(b => b != null).Select(b => b.GetSaveData()).ToList();
+            var saveData = activeBones
+                .Where(b => b != null)
+                .Select(b => b.GetSaveData())
+                .ToList();
+            
             SaveSystem.SaveBones(saveData);
         }
 

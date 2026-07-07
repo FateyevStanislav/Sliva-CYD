@@ -21,10 +21,9 @@ namespace Sliva_CYD_2.Save
         {
             var path = Path.Combine(Application.persistentDataPath, SAVE_FILE_NAME);
             
-            if (File.Exists(path))
-                return JsonConvert.DeserializeObject<List<BoneSaveData>>(File.ReadAllText(path));
-            
-            return null; 
+            return File.Exists(path) 
+                ? JsonConvert.DeserializeObject<List<BoneSaveData>>(File.ReadAllText(path)) 
+                : null;
         }
     }
 }

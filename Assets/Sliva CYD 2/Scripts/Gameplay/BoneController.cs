@@ -15,7 +15,7 @@ namespace Sliva_CYD_2.Gameplay
             
             if (config != null)
             {
-                GetComponent<Renderer>().sharedMaterial.color = config.BaseColor;
+                boneRenderer.sharedMaterial.color = config.BaseColor;
             }
         }
 
