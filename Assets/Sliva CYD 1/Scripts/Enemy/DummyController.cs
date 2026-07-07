@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SlivaCYD1.Enemy
 {
+    [DefaultExecutionOrder(-100)]
     public class DummyController : MonoBehaviour, IDamageable
     {
         [Header("Settings")]
