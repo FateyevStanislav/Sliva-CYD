@@ -6,14 +6,13 @@ namespace SlivaCYD3.Clicker
     public class ClickerModel
     {
         private const int WINDOW_SIZE = 60;
-        
-        private int totalClicks;
+
         private float[] recentClickTimes;
         private int currentIndex;
         
         public event Action<ClickerModel> OnDataChanged;
         
-        public int TotalClicks => totalClicks;
+        public int TotalClicks { get; private set; }
         public float CurrentCPS { get; private set; }
         public float AverageCPS { get; private set; }
         
@@ -29,7 +28,7 @@ namespace SlivaCYD3.Clicker
             recentClickTimes[currentIndex] = now;
             currentIndex = (currentIndex + 1) % WINDOW_SIZE;
             
-            totalClicks++;
+            TotalClicks++;
             CalculateCPS(now);
             CalculateAverageCPS();
             
@@ -49,10 +48,10 @@ namespace SlivaCYD3.Clicker
         
         private void CalculateAverageCPS()
         {
-            if (totalClicks == 0) 
+            if (TotalClicks == 0) 
                 return;
             
-            AverageCPS = totalClicks / Mathf.Max(1, Time.time);
+            AverageCPS = TotalClicks / Mathf.Max(1, Time.time);
         }
     }
 }
