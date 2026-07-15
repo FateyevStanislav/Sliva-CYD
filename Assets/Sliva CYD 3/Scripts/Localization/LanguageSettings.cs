@@ -1,21 +1,12 @@
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
-namespace SlivaCYD3.Settings
+namespace SlivaCYD3.Localization
 {
     public class LanguageSettings : MonoBehaviour
     {
         private const string RU_CODE = "ru";
         private const string EN_CODE = "en";
-        
-        public void SetLanguage(string localeCode)
-        {
-            var locale = LocalizationSettings.AvailableLocales.Locales
-                .Find(l => l.Identifier.Code == localeCode);
-            
-            if (locale != null)
-                LocalizationSettings.SelectedLocale = locale;
-        }
         
         public void SetRussian()
         {
@@ -25,6 +16,15 @@ namespace SlivaCYD3.Settings
         public void SetEnglish()
         {
             SetLanguage(EN_CODE);
+        }
+        
+        private static void SetLanguage(string localeCode)
+        {
+            var locale = LocalizationSettings.AvailableLocales.Locales
+                .Find(l => l.Identifier.Code == localeCode);
+            
+            if (locale != null)
+                LocalizationSettings.SelectedLocale = locale;
         }
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 namespace SlivaCYD3.Clicker
 {
@@ -17,15 +16,12 @@ namespace SlivaCYD3.Clicker
         private void OnEnable()
         {
             model.OnDataChanged += OnModelChanged;
-            LocalizationSettings.SelectedLocaleChanged += OnLanguageChanged;
-            
-            UpdateFullUI();
+            UpdateDataUI();
         }
         
         private void OnDisable()
         {
             model.OnDataChanged -= OnModelChanged;
-            LocalizationSettings.SelectedLocaleChanged -= OnLanguageChanged;
         }
         
         private void OnModelChanged(ClickerModel _)
@@ -33,20 +29,9 @@ namespace SlivaCYD3.Clicker
             UpdateDataUI();
         }
         
-        private void OnLanguageChanged(UnityEngine.Localization.Locale locale)
-        {
-            UpdateFullUI();
-        }
-        
         private void UpdateDataUI()
         {
             view.SetClicksData(model.TotalClicks, model.CurrentCPS, model.AverageCPS);
-        }
-        
-        private void UpdateFullUI()
-        {
-            UpdateDataUI();
-            view.SetLanguageLabel();
         }
         
         public void OnClick()
