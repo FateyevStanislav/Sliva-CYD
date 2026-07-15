@@ -8,8 +8,6 @@ namespace SlivaCYD3.Clicker
         [SerializeField] private ClickerController controller;
         [SerializeField] private ClickerView view;
         
-        private ClickerModel model;
-        
         private void Awake()
         {
             if (controller == null)
@@ -18,7 +16,7 @@ namespace SlivaCYD3.Clicker
             if (view == null)
                 throw new NullReferenceException("Clicker view not set");
             
-            model = new ClickerModel();
+            var model = new ClickerModel();
             controller.Initialize(model, view);
         }
     }
