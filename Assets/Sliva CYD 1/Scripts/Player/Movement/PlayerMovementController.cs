@@ -12,15 +12,9 @@ namespace SlivaCYD1.Player.Movement
         [SerializeField] private PlayerInputReader playerInputReader;
         [SerializeField] private PlayerMovementAnimator playerMovementAnimator;
         [SerializeField] private Transform cameraTransform;
-        [SerializeField] private PlayerStaminaController playerStaminaController;
-        [SerializeField] private PlayerAttackController playerAttackController;
-
-        [Header("Settings")]
-        [SerializeField] private float walkSpeed = 5f;
-        [SerializeField] private float runSpeed = 10f;
-        [SerializeField] private float acceleration = 8f;
-        [SerializeField] private float deceleration = 20f;
-        [SerializeField] private float rotationSmooth = 10f;
+        
+        private PlayerStaminaController playerStaminaController;
+        private PlayerAttackController playerAttackController;
         
         private PlayerMovementModel playerMovementModel;
 
@@ -29,15 +23,16 @@ namespace SlivaCYD1.Player.Movement
             characterController ??= GetComponent<CharacterController>();
             playerInputReader ??= GetComponent<PlayerInputReader>();
             playerMovementAnimator ??= GetComponent<PlayerMovementAnimator>();
-            playerStaminaController ??= GetComponent<PlayerStaminaController>();
-            playerAttackController ??= GetComponent<PlayerAttackController>();
+        }
 
-            playerMovementModel = new PlayerMovementModel(
-                walkSpeed,
-                runSpeed,
-                acceleration,
-                deceleration,
-                rotationSmooth);
+        public void Initialize(
+            PlayerMovementModel playerMovementModel,
+            PlayerAttackController playerAttackController,
+            PlayerStaminaController playerStaminaController)
+        {
+            this.playerMovementModel = playerMovementModel;
+            this.playerAttackController = playerAttackController;
+            this.playerStaminaController = playerStaminaController;
         }
         
         private void Update()

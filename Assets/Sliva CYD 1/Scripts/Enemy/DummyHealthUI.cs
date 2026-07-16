@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 namespace SlivaCYD1.Enemy
 {
-    [DefaultExecutionOrder(100)]
     public class DummyHealthUI : MonoBehaviour
     {
         [Header("References")]

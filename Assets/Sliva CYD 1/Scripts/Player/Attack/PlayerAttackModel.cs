@@ -1,3 +1,4 @@
+using SlivaCYD1.Configs.Player;
 using SlivaCYD1.Enemy;
 using UnityEngine;
 
@@ -5,11 +6,13 @@ namespace SlivaCYD1.Player.Attack
 {
     public class PlayerAttackModel
     {
-        public float Damage { get; }
+        public float Damage { get; private set; }
+        public float AttackRadius { get; private set; }
 
-        public PlayerAttackModel(float damage)
+        public PlayerAttackModel(PlayerAttackConfig config)
         {
-            Damage = damage;
+            Damage = config.Damage;
+            AttackRadius = config.AttackRadius;
         }
 
         public void ResolveHit(Collider[] candidates, Vector3 hitDirection)

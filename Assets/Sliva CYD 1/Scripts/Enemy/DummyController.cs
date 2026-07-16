@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace SlivaCYD1.Enemy
 {
-    [DefaultExecutionOrder(-100)]
     public class DummyController : MonoBehaviour, IDamageable
     {
         [Header("Settings")]
@@ -11,18 +10,21 @@ namespace SlivaCYD1.Enemy
         [SerializeField] private float respawnDelay = 3f;
         [SerializeField] private GameObject visuals;
 
-        private DummyHealthModel healthModel;
-        public DummyHealthModel Model => healthModel;
+        public DummyHealthModel Model { get; private set; }
 
         private void Awake()
         {
-            healthModel = new DummyHealthModel(maxHealth);
-            healthModel.Died += HandleDeath;
+            Model.Died += HandleDeath;
+        }
+
+        public void Initialize(DummyHealthModel model)
+        {
+            Model = model;
         }
 
         public void TakeDamage(float amount)
         {
-            healthModel.TakeDamage(amount);
+            Model.TakeDamage(amount);
         }
 
         private void HandleDeath()
@@ -37,7 +39,7 @@ namespace SlivaCYD1.Enemy
         {
             yield return new WaitForSeconds(respawnDelay);
 
-            healthModel.Respawn();
+            Model.Respawn();
             
             if (visuals != null)
                 visuals.SetActive(true);
@@ -45,7 +47,7 @@ namespace SlivaCYD1.Enemy
         
         private void OnDestroy()
         {
-            healthModel.Died -= HandleDeath;
+            Model.Died -= HandleDeath;
         }
     }
 }

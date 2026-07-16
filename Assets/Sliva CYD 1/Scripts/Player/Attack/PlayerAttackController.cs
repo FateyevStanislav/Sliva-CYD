@@ -10,8 +10,6 @@ namespace SlivaCYD1.Player.Attack
         [SerializeField] private Transform attackPoint;
 
         [Header("Settings")]
-        [SerializeField] private float damage = 10f;
-        [SerializeField] private float attackRadius = 1f;
         [SerializeField] private LayerMask targetLayer;
         
         public bool IsAttacking { get; private set; }
@@ -22,7 +20,11 @@ namespace SlivaCYD1.Player.Attack
         {
             playerInputReader ??= GetComponent<PlayerInputReader>();
             playerAttackAnimator ??= GetComponent<PlayerAttackAnimator>();
-            playerAttackModel = new PlayerAttackModel(damage);
+        }
+
+        public void Initialize(PlayerAttackModel model)
+        {
+            playerAttackModel = model;
         }
 
         private void Update()
@@ -44,7 +46,10 @@ namespace SlivaCYD1.Player.Attack
 
         public void OnAttackHitFrame()
         {
-            var candidates = Physics.OverlapSphere(attackPoint.position, attackRadius, targetLayer);
+            var candidates = Physics.OverlapSphere(
+                attackPoint.position, 
+                playerAttackModel.AttackRadius, 
+                targetLayer);
     
             var hitDirection = attackPoint.forward; 
     

@@ -1,9 +1,11 @@
+using SlivaCYD1.Configs.Player;
+
 namespace SlivaCYD1.Player.Movement
 {
     public class PlayerMovementModel
     {
-        public float WalkSpeed { get; }
-        public float RunSpeed { get; }
+        public float WalkSpeed { get; private set; }
+        public float RunSpeed { get; private set; }
         public float CurrentSpeed { get; set; }
         
         public float Acceleration { get; }
@@ -11,18 +13,13 @@ namespace SlivaCYD1.Player.Movement
         
         public float RotationSmooth { get; }
         
-        public PlayerMovementModel(
-            float walkSpeed,
-            float runSpeed,
-            float acceleration,
-            float deceleration,
-            float rotationSmooth)
+        public PlayerMovementModel(PlayerMovementConfig config)
         {
-            WalkSpeed = walkSpeed;
-            RunSpeed = runSpeed;
-            Acceleration = acceleration;
-            Deceleration = deceleration;
-            RotationSmooth = rotationSmooth;
+            WalkSpeed = config.WalkSpeed;
+            RunSpeed = config.RunSpeed;
+            Acceleration = config.Acceleration;
+            Deceleration = config.Deceleration;
+            RotationSmooth = config.RotationSmooth;
             CurrentSpeed = 0f;
         }
     }

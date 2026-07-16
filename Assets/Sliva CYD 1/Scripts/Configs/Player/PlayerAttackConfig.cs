@@ -7,6 +7,5 @@ namespace SlivaCYD1.Configs.Player
     {
         public float Damage = 10f;
         public float AttackRadius = 1f;
-        public LayerMask TargetLayer;
     }
 }

@@ -1,30 +1,28 @@
 using System;
+using SlivaCYD1.Configs.Player;
 using UnityEngine;
 
 namespace SlivaCYD1.Player.Stamina
 {
     public class PlayerStaminaModel
     {
-        public float MaxStamina { get; }
+        public float MaxStamina { get; private set; }
         public float CurrentStamina { get; private set; }
         
         public event Action<float> StaminaChanged;
         
-        public float RegenerationPerSec { get; }
-        public float SprintDrainPerSec { get; }
+        public float RegenerationPerSec { get; private set; }
+        public float SprintDrainPerSec { get; private set; }
 
         public bool CanRegenerate => CurrentStamina < MaxStamina;
         public bool CanRun => CurrentStamina >= SprintDrainPerSec;
 
-        public PlayerStaminaModel(
-            float maxStamina,
-            float regenerationPerSec,
-            float sprintDrainPerSec)
+        public PlayerStaminaModel(PlayerStaminaConfig config)
         {
-            MaxStamina = maxStamina;
-            CurrentStamina = maxStamina;
-            RegenerationPerSec = regenerationPerSec;
-            SprintDrainPerSec = sprintDrainPerSec;
+            MaxStamina = config.MaxStamina;
+            CurrentStamina = config.MaxStamina;
+            RegenerationPerSec = config.RegenerationPerSec;
+            SprintDrainPerSec = config.SprintDrainPerSec;
         }
 
         public void SetStamina(float currentStamina)

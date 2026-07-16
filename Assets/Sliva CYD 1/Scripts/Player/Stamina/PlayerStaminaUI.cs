@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 namespace SlivaCYD1.Player.Stamina
 {
-    [DefaultExecutionOrder(100)]
     public class PlayerStaminaUI : MonoBehaviour
     {
         [Header("References")]

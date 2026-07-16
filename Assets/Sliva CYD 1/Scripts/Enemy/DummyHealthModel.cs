@@ -1,20 +1,21 @@
 using System;
+using SlivaCYD1.Configs.Enemy;
 using UnityEngine;
 
 namespace SlivaCYD1.Enemy
 {
     public class DummyHealthModel
     {
-        public float MaxHealth { get; }
+        public float MaxHealth { get; private set; }
         public float CurrentHealth { get; private set; }
         
         public event Action<float> HealthChanged;
         public event Action Died;
 
-        public DummyHealthModel(float maxHealth)
+        public DummyHealthModel(DummyHealthConfig config)
         {
-            MaxHealth = maxHealth;
-            CurrentHealth = maxHealth;
+            MaxHealth = config.MaxHealth;
+            CurrentHealth = config.MaxHealth;
         }
 
         public void TakeDamage(float amount)
