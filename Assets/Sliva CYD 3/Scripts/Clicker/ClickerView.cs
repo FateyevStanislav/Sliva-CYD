@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using VContainer;
 
 namespace SlivaCYD3.Clicker
 {
@@ -9,12 +10,7 @@ namespace SlivaCYD3.Clicker
         [SerializeField] private TextMeshProUGUI cpsValueText;
         [SerializeField] private TextMeshProUGUI averageCpsValueText;
 
-        private ClickerModel model;
-        
-        public void Initialize(ClickerModel model)
-        {
-            this.model = model;
-        }
+        [Inject] private ClickerModel model;
         
         private void OnEnable()
         {

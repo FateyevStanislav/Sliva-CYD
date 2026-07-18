@@ -1,15 +1,11 @@
 using UnityEngine;
+using VContainer;
 
 namespace SlivaCYD3.Clicker
 {
     public class ClickerController : MonoBehaviour
     {
-        private ClickerModel model;
-        
-        public void Initialize(ClickerModel model)
-        {
-            this.model = model;
-        }
+        [Inject] private ClickerModel model;
         
         public void OnClick()
         {
