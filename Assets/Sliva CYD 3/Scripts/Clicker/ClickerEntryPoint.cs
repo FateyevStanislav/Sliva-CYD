@@ -17,7 +17,8 @@ namespace SlivaCYD3.Clicker
                 throw new NullReferenceException("Clicker view not set");
             
             var model = new ClickerModel();
-            controller.Initialize(model, view);
+            controller.Initialize(model);
+            view.Initialize(model);
         }
     }
 }

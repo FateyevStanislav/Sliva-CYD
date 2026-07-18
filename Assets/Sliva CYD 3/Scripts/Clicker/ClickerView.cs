@@ -9,11 +9,34 @@ namespace SlivaCYD3.Clicker
         [SerializeField] private TextMeshProUGUI cpsValueText;
         [SerializeField] private TextMeshProUGUI averageCpsValueText;
 
-        public void SetClicksData(int totalClicks, float currentCPS, float averageCPS)
+        private ClickerModel model;
+        
+        public void Initialize(ClickerModel model)
         {
-            clicksValueText.text = totalClicks.ToString();
-            cpsValueText.text = currentCPS.ToString("F1");
-            averageCpsValueText.text = averageCPS.ToString("F2");
+            this.model = model;
+        }
+        
+        private void OnEnable()
+        {
+            model.OnDataChanged += OnModelChanged;
+            UpdateUI();
+        }
+        
+        private void OnDisable()
+        {
+            model.OnDataChanged -= OnModelChanged;
+        }
+        
+        private void OnModelChanged(ClickerModel _)
+        {
+            UpdateUI();
+        }
+        
+        private void UpdateUI()
+        {
+            clicksValueText.text = model.TotalClicks.ToString();
+            cpsValueText.text = model.CurrentCPS.ToString("F1");
+            averageCpsValueText.text = model.AverageCPS.ToString("F2");
         }
     }
 }
