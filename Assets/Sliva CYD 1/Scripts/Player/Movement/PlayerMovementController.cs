@@ -1,6 +1,7 @@
 using SlivaCYD1.Player.Attack;
 using SlivaCYD1.Player.Stamina;
 using UnityEngine;
+using VContainer;
 
 namespace SlivaCYD1.Player.Movement
 {
@@ -13,26 +14,14 @@ namespace SlivaCYD1.Player.Movement
         [SerializeField] private PlayerMovementAnimator playerMovementAnimator;
         [SerializeField] private Transform cameraTransform;
         
-        private PlayerStaminaController playerStaminaController;
-        private PlayerAttackController playerAttackController;
-        
-        private PlayerMovementModel playerMovementModel;
+        [Inject] private PlayerStaminaModel playerStaminaModel;
+        [Inject] private PlayerMovementModel playerMovementModel;
 
         private void Awake()
         {
             characterController ??= GetComponent<CharacterController>();
             playerInputReader ??= GetComponent<PlayerInputReader>();
             playerMovementAnimator ??= GetComponent<PlayerMovementAnimator>();
-        }
-
-        public void Initialize(
-            PlayerMovementModel playerMovementModel,
-            PlayerAttackController playerAttackController,
-            PlayerStaminaController playerStaminaController)
-        {
-            this.playerMovementModel = playerMovementModel;
-            this.playerAttackController = playerAttackController;
-            this.playerStaminaController = playerStaminaController;
         }
         
         private void Update()
@@ -43,27 +32,20 @@ namespace SlivaCYD1.Player.Movement
             
             Move(moveDirection);
             Rotate(moveDirection);
-            UpdateAnimation();
         }
         
         private void UpdateSpeed()
         {
-            if (playerAttackController != null && playerAttackController.IsAttacking)
-            {
-                playerMovementModel.CurrentSpeed = 0f;
-                return;
-            }
-
             var targetSpeed = GetTargetSpeed();
 
             var changeRate = targetSpeed > playerMovementModel.CurrentSpeed
                 ? playerMovementModel.Acceleration
                 : playerMovementModel.Deceleration;
 
-            playerMovementModel.CurrentSpeed = Mathf.MoveTowards(
+            playerMovementModel.SetCurrentSpeed(Mathf.MoveTowards(
                 playerMovementModel.CurrentSpeed,
                 targetSpeed,
-                changeRate * Time.deltaTime);
+                changeRate * Time.deltaTime));
         }
         
         private float GetTargetSpeed()
@@ -71,7 +53,7 @@ namespace SlivaCYD1.Player.Movement
             if (playerInputReader.MoveInput == Vector2.zero)
                 return 0f;
 
-            return playerStaminaController.IsSprintActive
+            return playerStaminaModel.IsSprintActive
                 ? playerMovementModel.RunSpeed
                 : playerMovementModel.WalkSpeed;
         }
@@ -116,12 +98,6 @@ namespace SlivaCYD1.Player.Movement
             }
 
             return moveDirection;
-        }
-        
-        private void UpdateAnimation()
-        {
-            var normalizedSpeed = playerMovementModel.CurrentSpeed / playerMovementModel.RunSpeed;
-            playerMovementAnimator.UpdateMovementSpeed(normalizedSpeed);
         }
     }
 }

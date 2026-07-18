@@ -1,6 +1,5 @@
+using System;
 using SlivaCYD1.Configs.Player;
-using SlivaCYD1.Enemy;
-using UnityEngine;
 
 namespace SlivaCYD1.Player.Attack
 {
@@ -8,6 +7,9 @@ namespace SlivaCYD1.Player.Attack
     {
         public float Damage { get; private set; }
         public float AttackRadius { get; private set; }
+        public bool IsAttacking { get; private set; }
+        
+        public event Action<PlayerAttackModel> OnAttacked;
 
         public PlayerAttackModel(PlayerAttackConfig config)
         {
@@ -15,20 +17,11 @@ namespace SlivaCYD1.Player.Attack
             AttackRadius = config.AttackRadius;
         }
 
-        public void ResolveHit(Collider[] candidates, Vector3 hitDirection)
+        public void SetIsAttacking(bool isAttacking)
         {
-            foreach (var candidate in candidates)
-            {
-                if (candidate.TryGetComponent<IDamageable>(out var damageable)) 
-                {
-                    damageable.TakeDamage(Damage);
-                    
-                    if (candidate.TryGetComponent<DummyPhysicsShake>(out var shake))
-                    {
-                        shake.ApplyImpact(hitDirection);
-                    }
-                }
-            }
+            IsAttacking = isAttacking;
+            if (isAttacking)
+                OnAttacked?.Invoke(this);
         }
     }
 }

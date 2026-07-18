@@ -1,30 +1,24 @@
 using UnityEngine;
+using VContainer;
 
 namespace SlivaCYD1.Player.Stamina
 {
     public class PlayerStaminaController : MonoBehaviour
     {
         [SerializeField] private PlayerInputReader playerInputReader;
-
-        public bool IsSprintActive { get; private set; }
-
-        public PlayerStaminaModel Model { get; private set; }
+        
+        [Inject] private PlayerStaminaModel playerStaminaModel;
 
         private void Awake()
         {
             playerInputReader ??= GetComponent<PlayerInputReader>();
         }
 
-        public void Initialize(PlayerStaminaModel model)
-        {
-            Model = model;
-        }
-
         private void Update()
         {
             UpdateSprintState();
 
-            if (IsSprintActive)
+            if (playerStaminaModel.IsSprintActive)
                 DrainStamina();
             else
                 RegenerateStamina();
@@ -35,24 +29,24 @@ namespace SlivaCYD1.Player.Stamina
             var hasMoveInput = playerInputReader.MoveInput != Vector2.zero;
             var wantsSprint = playerInputReader.IsSprintPressed;
 
-            IsSprintActive = wantsSprint && hasMoveInput && Model.CanRun;
+            playerStaminaModel.SetIsSprintActive(wantsSprint && hasMoveInput && playerStaminaModel.CanRun);
         }
 
         private void DrainStamina()
         {
-            var newStamina = Model.CurrentStamina 
-                             - Model.SprintDrainPerSec * Time.deltaTime;
-            Model.SetStamina(newStamina);
+            var newStamina = playerStaminaModel.CurrentStamina 
+                             - playerStaminaModel.SprintDrainPerSec * Time.deltaTime;
+            playerStaminaModel.SetStamina(newStamina);
         }
 
         private void RegenerateStamina()
         {
-            if (!Model.CanRegenerate)
+            if (!playerStaminaModel.CanRegenerate)
                 return;
 
-            var newStamina = Model.CurrentStamina 
-                             + Model.RegenerationPerSec * Time.deltaTime;
-            Model.SetStamina(newStamina);
+            var newStamina = playerStaminaModel.CurrentStamina 
+                             + playerStaminaModel.RegenerationPerSec * Time.deltaTime;
+            playerStaminaModel.SetStamina(newStamina);
         }
     }
 }

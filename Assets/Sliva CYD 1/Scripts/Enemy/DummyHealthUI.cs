@@ -1,35 +1,30 @@
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 namespace SlivaCYD1.Enemy
 {
     public class DummyHealthUI : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private DummyController dummyController;
         [SerializeField] private Slider healthSlider;
 
+        [Inject] private DummyHealthModel dummyHealthModel;
+        
         private void OnEnable()
         {
-            if (dummyController != null)
-            {
-                dummyController.Model.HealthChanged += UpdateHealthBar;
-                UpdateHealthBar(dummyController.Model.CurrentHealth);
-            }
+            dummyHealthModel.HealthChanged += UpdateHealthBar;
+            UpdateHealthBar(dummyHealthModel);
         }
 
         private void OnDisable()
         {
-            if (dummyController != null)
-            {
-                dummyController.Model.HealthChanged -= UpdateHealthBar;
-            }
+            dummyHealthModel.HealthChanged -= UpdateHealthBar;
         }
 
-        private void UpdateHealthBar(float currentHealth)
+        private void UpdateHealthBar(DummyHealthModel dummyHealthModel)
         {
-            healthSlider.maxValue = dummyController.Model.MaxHealth;
-            healthSlider.value = currentHealth;
+            healthSlider.maxValue = dummyHealthModel.MaxHealth;
+            healthSlider.value = dummyHealthModel.CurrentHealth;
         }
     }
 }

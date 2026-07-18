@@ -13,6 +13,8 @@ namespace SlivaCYD1.Player.Stamina
         
         public float RegenerationPerSec { get; private set; }
         public float SprintDrainPerSec { get; private set; }
+        
+        public bool IsSprintActive { get; private set; }
 
         public bool CanRegenerate => CurrentStamina < MaxStamina;
         public bool CanRun => CurrentStamina >= SprintDrainPerSec;
@@ -34,6 +36,11 @@ namespace SlivaCYD1.Player.Stamina
 
             CurrentStamina = clampedStamina;
             StaminaChanged?.Invoke(CurrentStamina);
+        }
+        
+        public void SetIsSprintActive(bool isActive)
+        {
+            IsSprintActive = isActive;
         }
     }
 }

@@ -1,13 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 namespace SlivaCYD1.Player.Stamina
 {
     public class PlayerStaminaUI : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private PlayerStaminaController playerStaminaController;
         [SerializeField] private Slider staminaSlider;
         [SerializeField] private CanvasGroup canvasGroup;
 
@@ -15,6 +15,7 @@ namespace SlivaCYD1.Player.Stamina
         [SerializeField] private float visibleDelay = 1.5f;
         [SerializeField] private float fadeDuration = 0.4f;
 
+        [Inject] private PlayerStaminaModel playerStaminaModel;
         private Coroutine fadeCoroutine;
 
         private void Awake()
@@ -24,20 +25,20 @@ namespace SlivaCYD1.Player.Stamina
 
         private void OnEnable()
         {
-            playerStaminaController.Model.StaminaChanged += OnStaminaChanged;
+            playerStaminaModel.StaminaChanged += OnStaminaChanged;
             SyncImmediate();
         }
 
         private void OnDisable()
         {
-            playerStaminaController.Model.StaminaChanged -= OnStaminaChanged;
+            playerStaminaModel.StaminaChanged -= OnStaminaChanged;
             fadeCoroutine = null;
         }
 
         private void SyncImmediate()
         {
-            staminaSlider.maxValue = playerStaminaController.Model.MaxStamina;
-            staminaSlider.value = playerStaminaController.Model.CurrentStamina;
+            staminaSlider.maxValue = playerStaminaModel.MaxStamina;
+            staminaSlider.value = playerStaminaModel.CurrentStamina;
         }
 
         private void OnStaminaChanged(float currentStamina)

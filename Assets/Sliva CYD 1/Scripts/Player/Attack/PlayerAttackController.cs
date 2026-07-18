@@ -1,4 +1,6 @@
+using SlivaCYD1.Enemy;
 using UnityEngine;
+using VContainer;
 
 namespace SlivaCYD1.Player.Attack
 {
@@ -6,30 +8,21 @@ namespace SlivaCYD1.Player.Attack
     {
         [Header("References")]
         [SerializeField] private PlayerInputReader playerInputReader;
-        [SerializeField] private PlayerAttackAnimator playerAttackAnimator;
         [SerializeField] private Transform attackPoint;
 
         [Header("Settings")]
         [SerializeField] private LayerMask targetLayer;
         
-        public bool IsAttacking { get; private set; }
-
-        private PlayerAttackModel playerAttackModel;
+        [Inject] private PlayerAttackModel playerAttackModel;
 
         private void Awake()
         {
             playerInputReader ??= GetComponent<PlayerInputReader>();
-            playerAttackAnimator ??= GetComponent<PlayerAttackAnimator>();
         }
-
-        public void Initialize(PlayerAttackModel model)
-        {
-            playerAttackModel = model;
-        }
-
+        
         private void Update()
         {
-            if (IsAttacking) return;
+            if (playerAttackModel.IsAttacking) return;
 
             if (playerInputReader.AttackRequested)
             {
@@ -40,8 +33,7 @@ namespace SlivaCYD1.Player.Attack
 
         private void StartAttack()
         {
-            IsAttacking = true;
-            playerAttackAnimator.UpdateAttackTrigger();
+            playerAttackModel.SetIsAttacking(true);
         }
 
         public void OnAttackHitFrame()
@@ -53,12 +45,28 @@ namespace SlivaCYD1.Player.Attack
     
             var hitDirection = attackPoint.forward; 
     
-            playerAttackModel.ResolveHit(candidates, hitDirection);
+            ResolveHit(candidates, hitDirection);
+        }
+        
+        private void ResolveHit(Collider[] candidates, Vector3 hitDirection)
+        {
+            foreach (var candidate in candidates)
+            {
+                if (candidate.TryGetComponent<IDamageable>(out var damageable)) 
+                {
+                    damageable.TakeDamage(playerAttackModel.Damage);
+                    
+                    if (candidate.TryGetComponent<DummyPhysicsShake>(out var shake))
+                    {
+                        shake.ApplyImpact(hitDirection);
+                    }
+                }
+            }
         }
 
         public void OnAttackFinished()
         {
-            IsAttacking = false;
+            playerAttackModel.SetIsAttacking(false);
         }
     }
 }

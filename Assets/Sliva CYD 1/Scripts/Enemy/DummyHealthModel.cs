@@ -9,7 +9,7 @@ namespace SlivaCYD1.Enemy
         public float MaxHealth { get; private set; }
         public float CurrentHealth { get; private set; }
         
-        public event Action<float> HealthChanged;
+        public event Action<DummyHealthModel> HealthChanged;
         public event Action Died;
 
         public DummyHealthModel(DummyHealthConfig config)
@@ -25,7 +25,7 @@ namespace SlivaCYD1.Enemy
             CurrentHealth -= amount;
             CurrentHealth = Mathf.Max(0, CurrentHealth);
             
-            HealthChanged?.Invoke(CurrentHealth);
+            HealthChanged?.Invoke(this);
 
             if (CurrentHealth <= 0)
             {
@@ -36,7 +36,7 @@ namespace SlivaCYD1.Enemy
         public void Respawn()
         {
             CurrentHealth = MaxHealth;
-            HealthChanged?.Invoke(CurrentHealth);
+            HealthChanged?.Invoke(this);
         }
     }
 }
